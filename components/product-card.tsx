@@ -1,7 +1,7 @@
 import Link from "next/link"
 import type { Products } from "@/lib/types"
 
-export default function IdeaCard({ product }: { product: Products }) {
+export default function ProductCard({ product }: { product: Products }) {
   return (
     <div className="flex flex-col justify-between h-full border rounded-lg p-6 shadow-sm hover:shadow-md transition-shadow relative">
       <div>

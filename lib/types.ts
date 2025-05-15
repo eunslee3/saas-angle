@@ -3,7 +3,7 @@
 export interface Products {
   id: string
   title: string
-  description: string
+  tagline: string
   problem?: string
   tags: string[]
   mrr: string
