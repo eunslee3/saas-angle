@@ -3,10 +3,13 @@ import { useState } from "react"
 import IdeaFeed from "@/components/idea-feed"
 import { Search } from "lucide-react"
 import Link from "next/link"
-import { useQuery } from '@tanstack/react-query'
+import { useQuery, useMutation  } from '@tanstack/react-query'
 import axios from "axios"
+import Modal from "@/components/modal"
 
 export default function Home() {
+  const [isModalOpen, setIsModalOpen] = useState(false)
+  
   const fetchProducts = async () => {
     const response = await axios.get('/api/get-ideas')
     return response.data.ideas
@@ -16,9 +19,7 @@ export default function Home() {
     queryKey: ['my-data'],
     queryFn: fetchProducts,
   })
-
-  console.log(products)
-
+  
   return (
     <div className="space-y-8 py-4">
       <div>
@@ -52,7 +53,14 @@ export default function Home() {
       </div>
       {isLoading && <div>Loading...</div>}
       {error && <div>Error in retrieving products</div>}
-      {products && <IdeaFeed products={products} />}
+      {products && <IdeaFeed products={products} setIsModalOpen={setIsModalOpen}/>}
+
+      <Modal isOpen={isModalOpen} onClose={() => setIsModalOpen(false)}>
+        <div className="space-y-4">
+          <h2 className="text-xl font-semibold">Modal Title</h2>
+          <p>Add your content here</p>
+        </div>
+      </Modal>
     </div>
   )
 }

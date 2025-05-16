@@ -1,47 +1,96 @@
-import { NextResponse } from "next/server"
+import { NextResponse } from 'next/server'
+import OpenAI from 'openai'
+
+const openai = new OpenAI({
+  apiKey: process.env.OPENAI_API_KEY,
+})
 
 export async function POST(request: Request) {
   try {
     const body = await request.json()
-    const { title, problem } = body
+    const { title, mrr, link, tagline } = body
 
-    if (!title || !problem) {
-      return NextResponse.json({ error: "Missing required fields: title and problem" }, { status: 400 })
+    console.log({ title, mrr, link, tagline })
+
+    if (!title || !mrr || !link || !tagline) {
+      return NextResponse.json(
+        { error: 'Missing required fields: title, tagline, mrr, or link' },
+        { status: 400 }
+      )
     }
 
-    // Simulate processing time for AI generation
-    await new Promise((resolve) => setTimeout(resolve, 1500))
+    const response = await openai.chat.completions.create({
+      model: 'gpt-4',
+      messages: [
+        {
+          role: 'user',
+          content: `You're a SaaS strategist helping a solo developer evaluate the potential of a new product idea. Your goal is to return **high-leverage, strategic insight** that helps them determine whether to build it — and if so, how to best position it.
 
-    // Mock angle data based on the input
-    const angle = {
-      microNiche: `Knowledge management platform specifically designed for indie ${title.toLowerCase()} developers, focusing on narrative design, asset management, and collaborative worldbuilding.`,
-      reframedProblem: `Current solutions don't address the unique needs of ${title.toLowerCase()} - ${problem}`,
-      audience:
-        "Independent developers and small studios (1-10 people), narrative designers and writers working on story-driven projects, and design teachers and students.",
-      monetization: {
-        approach: "Freemium Approach",
-        tiers: [
-          "Free tier: Basic templates, single project limit",
-          "Pro tier ($15/mo): Unlimited projects, advanced features",
-          "Team tier ($49/mo): Collaboration tools, asset sharing",
-        ],
-      },
-      stack: {
-        frontend: ["Next.js", "Tailwind CSS", "React Query"],
-        backend: ["Node.js", "PostgreSQL", "Prisma ORM"],
-      },
-      buildPlan: [
-        { day: "D1", task: "Project setup, database schema, authentication" },
-        { day: "D2-3", task: "Core template system and editor" },
-        { day: "D4-5", task: "Management features and user flows" },
-        { day: "D6", task: "Export functionality and asset organization" },
-        { day: "D7", task: "Testing, bug fixes, and initial launch" },
+          You will receive a product title, a tagline, and optionally a problem statement or MRR.
+
+          Think like a founder, marketer, and venture analyst — all at once. Your job is not to repeat what the product *is*, but to uncover:
+          - The sharpest and smallest **beachhead market** with real urgency
+          - How to **reframe the problem** in a way that makes it impossible to ignore
+          - A monetization strategy that reflects **user psychology**, **value perception**, and **buying behavior**
+          - A differentiated solution with clear **workflow integration** or UX edge
+          - Competitor insights that identify **unfair advantages**, not just pricing
+
+          Avoid boilerplate or shallow generalizations. Be blunt, specific, and original. This is for a real founder who will act on your input.
+
+          Respond in the following **JSON structure**, filling in each field based on critical thinking:
+
+          {
+            "microNiche": "",
+            "reframedProblem": "",
+            "audience": "",
+            "monetization": {
+              "approach": "",
+              "explanation": []
+            },
+            "solution": [],
+            "competitorAnalysis": {
+              "directCompetitors": [
+                {
+                  "name": "",
+                  "description": "",
+                  "pricing": "",
+                  "whyThisProductIsDifferent": ""
+                }
+              ],
+              "indirectCompetitors": [
+                {
+                  "name": "",
+                  "description": "",
+                  "pricing": "",
+                  "whyThisProductCanStealMarketShare": ""
+                }
+              ]
+            }
+          }
+
+          Here is the product idea:
+
+          Product: ${title}  
+          Tagline: ${tagline}  
+          Monthly Recurring Revenue: ${mrr}`,
+        },
       ],
+    })
+
+    const rawContent = response.choices[0].message.content
+    console.log('Raw GPT Content:', rawContent)
+
+    let parsedAngle
+    try {
+      parsedAngle = JSON.parse(rawContent || '{}')
+    } catch (err) {
+      console.error('Failed to parse angle JSON:', err)
+      return NextResponse.json({ error: 'Invalid JSON format from OpenAI' }, { status: 502 })
     }
 
-    return NextResponse.json({ angle })
+    return NextResponse.json({ angle: parsedAngle })
   } catch (error) {
-    console.error("Error generating angle:", error)
-    return NextResponse.json({ error: "Failed to generate angle" }, { status: 500 })
+    console.error('Error generating angle:', error)
+    return NextResponse.json({ error: 'Failed to generate angle' }, { status: 500 })
   }
 }

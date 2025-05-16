@@ -7,7 +7,7 @@ export interface Products {
   problem?: string
   tags: string[]
   mrr: string
-  founders: string
+  link: string
   createdAt: string
 }
 

@@ -1,7 +1,37 @@
 import Link from "next/link"
 import type { Products } from "@/lib/types"
+import { useMutation  } from '@tanstack/react-query'
+import axios from "axios"
+import { useRouter } from "next/navigation"
+import { useAngleStore } from "@/store/useAngleStore"
 
-export default function ProductCard({ product }: { product: Products }) {
+export default function ProductCard({ product, setIsModalOpen }: { product: Products, setIsModalOpen: (isOpen: boolean) => void }) {
+  const router = useRouter()
+  const { setAngle } = useAngleStore()
+  const handleGenerateAngle = async () => {
+    setIsModalOpen(true)
+    const response = await axios.post('/api/generate-angle', { 
+      title: product.title,
+      mrr: product.mrr,
+      link: product.link,
+      tagline: product.tagline
+     })
+    return response.data
+  }
+
+  const mutation = useMutation({
+    mutationFn: handleGenerateAngle,
+    onSuccess: (data) => {
+      setAngle(data)
+      setIsModalOpen(false)
+      router.push(`/angle`)
+      // optional: refetch data, reset form, show toast, etc.
+    },
+    onError: (error) => {
+      console.error('❌ Error submitting product:', error)
+    }
+  })
+
   return (
     <div className="flex flex-col justify-between h-full border rounded-lg p-6 shadow-sm hover:shadow-md transition-shadow relative">
       <div>
@@ -31,8 +61,8 @@ export default function ProductCard({ product }: { product: Products }) {
         </div>
       </div>
 
-      <Link
-        href={`/angle/${product?.id}`}
+      <button
+        onClick={() => mutation.mutate()}
         className="w-full py-3 bg-blue-600 text-white rounded-md hover:bg-blue-700 transition-colors flex items-center justify-center gap-2"
       >
         <svg width="20" height="20" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
@@ -44,7 +74,7 @@ export default function ProductCard({ product }: { product: Products }) {
           />
         </svg>
         Generate Angle
-      </Link>
+      </button>
     </div>
   )
 }
