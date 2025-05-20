@@ -85,11 +85,11 @@ export default function AnglePage() {
             </div>
             <h2 className="font-medium text-gray-900">Monetization Model</h2>
           </div>
-          <div className="text-gray-700">
+          <div className="flex flex-col gap-2">
             <p className="text-gray-700">{angle?.monetization?.approach}</p>
             <ul className="list-disc pl-5 space-y-1">
-              {angle?.monetization?.tiers?.map((tier, index) => (
-                <li key={index}>{tier}</li>
+              {angle?.monetization.explanation.map((el) => (
+                <li className="text-gray-700" key={el}>{el}</li>
               ))}
             </ul>
           </div>
