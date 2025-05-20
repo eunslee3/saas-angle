@@ -1,4 +1,5 @@
 import { create } from 'zustand'
+import { persist } from 'zustand/middleware'
 
 interface AngleResponse {
   microNiche: string
@@ -8,7 +9,10 @@ interface AngleResponse {
     approach: string
     explanation: string[]
   }
-  solution: string[]
+  solution: {
+    coreProduct: string
+    keyFeatures: string[]
+  }
   competitorAnalysis: {
     directCompetitors: {
       name: string
@@ -31,8 +35,15 @@ interface AngleStore {
   clearAngle: () => void
 }
 
-export const useAngleStore = create<AngleStore>((set) => ({
-  angle: null,
-  setAngle: (angle) => set({ angle }),
-  clearAngle: () => set({ angle: null }),
-}))
+export const useAngleStore = create<AngleStore>()(
+  persist(
+    (set) => ({
+      angle: null,
+      setAngle: (angle) => set({ angle }),
+      clearAngle: () => set({ angle: null }),
+    }),
+    {
+      name: 'angle-storage', // key in localStorage
+    }
+  )
+)

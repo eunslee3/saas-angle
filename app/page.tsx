@@ -16,7 +16,7 @@ export default function Home() {
   }
   
   const { data: products, isLoading, error } = useQuery({
-    queryKey: ['my-data'],
+    queryKey: ['angle'],
     queryFn: fetchProducts,
   })
   

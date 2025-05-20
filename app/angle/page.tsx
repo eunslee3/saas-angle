@@ -8,6 +8,7 @@ import { useAngleStore } from "@/store/useAngleStore"
 
 export default function AnglePage() {
   const { angle } = useAngleStore()
+  console.log('angle: ', angle)
 
   return (
     <div className="max-w-3xl mx-auto py-6">
@@ -44,6 +45,27 @@ export default function AnglePage() {
           <p className="text-gray-700">{angle?.reframedProblem}</p>
         </div>
 
+        {/* Solution */}
+        <div className="bg-white rounded-lg border p-6">
+          <div className="flex items-center mb-3">
+            <div className="w-6 h-6 rounded-full bg-blue-100 flex items-center justify-center mr-2">
+              <span className="text-blue-600 text-sm">↹</span>
+            </div>
+            <h2 className="font-medium text-gray-900">Solution</h2>
+          </div>
+          <div className="space-y-3 text-gray-700">
+            <p className="text-gray-700">{angle?.solution?.coreProduct}</p>
+            <div className="flex flex-col gap-2">
+              <p className="font-medium text-gray-900">Key Features</p>
+              <ul className="list-disc pl-5 space-y-1">
+                {angle?.solution?.keyFeatures?.map((feature, index) => (
+                  <li key={index}>{feature}</li>
+                ))}
+              </ul>
+            </div>
+          </div>
+        </div>
+
         {/* Target Audience */}
         <div className="bg-white rounded-lg border p-6">
           <div className="flex items-center mb-3">
@@ -52,11 +74,7 @@ export default function AnglePage() {
             </div>
             <h2 className="font-medium text-gray-900">Target Audience</h2>
           </div>
-          <ul className="list-disc pl-5 space-y-1 text-gray-700">
-            {angle?.targetAudience?.map((audience, index) => (
-              <li key={index}>{audience}</li>
-            ))}
-          </ul>
+          <p className="text-gray-700">{angle?.audience}</p>
         </div>
 
         {/* Monetization Model */}
@@ -68,7 +86,7 @@ export default function AnglePage() {
             <h2 className="font-medium text-gray-900">Monetization Model</h2>
           </div>
           <div className="text-gray-700">
-            <p className="font-medium mb-2">{angle?.monetization?.approach}</p>
+            <p className="text-gray-700">{angle?.monetization?.approach}</p>
             <ul className="list-disc pl-5 space-y-1">
               {angle?.monetization?.tiers?.map((tier, index) => (
                 <li key={index}>{tier}</li>
@@ -83,43 +101,35 @@ export default function AnglePage() {
             <div className="w-6 h-6 rounded-full bg-blue-100 flex items-center justify-center mr-2">
               <span className="text-blue-600 text-sm">⚙</span>
             </div>
-            <h2 className="font-medium text-gray-900">Suggested Tech Stack</h2>
+            <h2 className="font-medium text-gray-900">Competitor Analysis</h2>
           </div>
           <div className="grid grid-cols-2 gap-4 text-gray-700">
-            <div>
-              <p className="font-medium mb-1">Frontend</p>
+            <div className="flex flex-col gap-2">
+              <em><p className="text-gray-900">Direct Competitors</p></em>
               <ul className="list-disc pl-5 space-y-1">
-                {angle?.techStack?.frontend?.map((tech, index) => (
-                  <li key={index}>{tech}</li>
+                {angle?.competitorAnalysis?.directCompetitors?.map((competitor, index) => (
+                  <>
+                    <li key={index}>{competitor.name}</li>
+                    <li>{competitor.description}</li>
+                    <li>{competitor.pricing}</li>
+                    <li>{competitor.whyThisProductIsDifferent}</li>
+                  </>
                 ))}
               </ul>
             </div>
-            <div>
-              <p className="font-medium mb-1">Backend</p>
+            <div className="flex flex-col gap-2">
+            <em><p className="text-gray-900">Indirect Competitors</p></em>
               <ul className="list-disc pl-5 space-y-1">
-                {angle?.techStack?.backend?.map((tech, index) => (
-                  <li key={index}>{tech}</li>
+                {angle?.competitorAnalysis?.indirectCompetitors?.map((competitor, index) => (
+                  <>
+                    <li key={index}>{competitor.name}</li>
+                    <li>{competitor.description}</li>
+                    <li>{competitor.pricing}</li>
+                    <li>{competitor.whyThisProductCanStealMarketShare}</li>
+                  </>
                 ))}
               </ul>
             </div>
-          </div>
-        </div>
-
-        {/* 7-Day Build Plan */}
-        <div className="bg-white rounded-lg border p-6">
-          <div className="flex items-center mb-3">
-            <div className="w-6 h-6 rounded-full bg-blue-100 flex items-center justify-center mr-2">
-              <span className="text-blue-600 text-sm">↹</span>
-            </div>
-            <h2 className="font-medium text-gray-900">7-Day Build Plan</h2>
-          </div>
-          <div className="space-y-3 text-gray-700">
-            {angle?.buildPlan?.map((step, index) => (
-              <div key={index} className="flex">
-                <div className="font-medium text-amber-600 w-10">{step.day}</div>
-                <div>{step.task}</div>
-              </div>
-            ))}
           </div>
         </div>
       </div>

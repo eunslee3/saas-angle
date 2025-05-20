@@ -16,7 +16,7 @@ export default function ProductCard({ product, setIsModalOpen }: { product: Prod
       link: product.link,
       tagline: product.tagline
      })
-    return response.data
+    return response.data.angle
   }
 
   const mutation = useMutation({

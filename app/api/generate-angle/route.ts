@@ -27,21 +27,34 @@ export async function POST(request: Request) {
           content: `You're a SaaS strategist helping a solo developer evaluate the potential of a new product idea. Your goal is to return **high-leverage, strategic insight** that helps them determine whether to build it — and if so, how to best position it.
 
           You will receive a product title, a tagline, and optionally a problem statement or MRR.
-
+          
           Think like a founder, marketer, and venture analyst — all at once. Your job is not to repeat what the product *is*, but to uncover:
           - The sharpest and smallest **beachhead market** with real urgency
           - How to **reframe the problem** in a way that makes it impossible to ignore
           - A monetization strategy that reflects **user psychology**, **value perception**, and **buying behavior**
-          - A differentiated solution with clear **workflow integration** or UX edge
-          - Competitor insights that identify **unfair advantages**, not just pricing
-
+          - A **differentiated product solution** with clear UX, workflow, or integration insight — not just benefits or aspirations
+          - Competitor insights that identify **unfair advantages**, not just pricing or features
+          
+          Your response should include a **specific, actionable solution** — framed as what the developer could *actually build*. Don’t just describe a concept. Describe how it would work. Think: what would the dashboard look like? What would the user do first? Why does this model uniquely reduce friction or pain?
+          
           Avoid boilerplate or shallow generalizations. Be blunt, specific, and original. This is for a real founder who will act on your input.
-
+          
           Respond in the following **JSON structure**, filling in each field based on critical thinking:
+
+          Do not refer to the new product as if it already exists. It is a proposed solution, and a potential competitor. Never write as if this solution is already launched or available in the market.
 
           {
             "microNiche": "",
             "reframedProblem": "",
+            "solution": {
+              "coreProduct": "A subscription-based platform where startups can request design and dev tasks from a curated pool of creatives — like 'Design-as-a-Service' but with hybrid pricing.",
+              "keyFeatures": [
+                "Project request form with pre-scoped task templates",
+                "Team-matching algorithm based on startup’s tech stack and design style",
+                "Dashboard to manage active projects and see who’s working on what",
+                "Slack integration for async check-ins with contractors"
+              ]
+            },
             "audience": "",
             "monetization": {
               "approach": "",
