@@ -5,10 +5,12 @@ import { Search } from "lucide-react"
 import Link from "next/link"
 import { useQuery, useMutation  } from '@tanstack/react-query'
 import axios from "axios"
-import Modal from "@/components/modal"
+import LoadingModal from "@/components/loading-modal"
+import { MRRFilterModal } from "@/components/mrr-filter-modal"
 
 export default function Home() {
   const [isModalOpen, setIsModalOpen] = useState(false)
+  const [isMRRFilterOpen, setIsMRRFilterOpen] = useState(false)
   const [currentPage, setCurrentPage] = useState(1)
   
   const fetchProducts = async ({ queryKey }: { queryKey: (string | number)[] }) => {
@@ -77,12 +79,14 @@ export default function Home() {
         </>
       )}
 
-      <Modal isOpen={isModalOpen} onClose={() => setIsModalOpen(false)}>
-        <div className="space-y-4">
-          <h2 className="text-xl font-semibold">Modal Title</h2>
-          <p>Add your content here</p>
-        </div>
-      </Modal>
+      <LoadingModal isOpen={isModalOpen} onClose={() => setIsModalOpen(false)} />
+      <MRRFilterModal
+        isOpen={isMRRFilterOpen}
+        onClose={() => setIsMRRFilterOpen(false)}
+        onApply={(min, max) => {
+          // handle filter logic here
+        }}
+      />
     </div>
   )
 }
