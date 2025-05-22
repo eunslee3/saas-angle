@@ -25,6 +25,7 @@ export default function Home() {
   )
   
   return (
+    <>
     <div className="space-y-8 py-4">
       <div>
         <h1 className="text-3xl font-bold mb-2">Explore SaaS Ideas</h1>
@@ -42,7 +43,7 @@ export default function Home() {
             className="pl-10 pr-4 py-2 w-full border rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500"
           />
         </div>
-        <Link href="/filters" className="flex items-center gap-2 px-4 py-2 border rounded-lg hover:bg-gray-50">
+        <button onClick={() => setIsMRRFilterOpen(true)} className="flex items-center gap-2 px-4 py-2 border rounded-lg hover:bg-gray-50">
           <svg className="h-5 w-5" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
             <path
               d="M3 4.5H21M3 12H21M3 19.5H21"
@@ -52,8 +53,8 @@ export default function Home() {
               strokeLinejoin="round"
             />
           </svg>
-          Filters
-        </Link>
+          MRR Filter
+        </button>
       </div>
       {isLoading && <div>Loading...</div>}
       {error && <div>Error in retrieving products</div>}
@@ -78,15 +79,15 @@ export default function Home() {
           </div>
         </>
       )}
-
-      <LoadingModal isOpen={isModalOpen} onClose={() => setIsModalOpen(false)} />
-      <MRRFilterModal
+    </div>
+    <LoadingModal isOpen={isModalOpen} onClose={() => setIsModalOpen(false)} />
+    <MRRFilterModal
         isOpen={isMRRFilterOpen}
         onClose={() => setIsMRRFilterOpen(false)}
         onApply={(min, max) => {
           // handle filter logic here
         }}
       />
-    </div>
+    </>
   )
 }
