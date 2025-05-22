@@ -8,7 +8,6 @@ import { useAngleStore } from "@/store/useAngleStore"
 
 export default function AnglePage() {
   const { angle } = useAngleStore()
-  console.log('angle: ', angle)
 
   return (
     <div className="max-w-3xl mx-auto py-6">
@@ -18,8 +17,7 @@ export default function AnglePage() {
       </Link>
 
       <div className="text-center mb-8">
-        <h1 className="text-2xl font-bold mb-1">{angle?.title}</h1>
-        <p className="text-gray-600">{angle?.subtitle}</p>
+        <h1 className="text-2xl font-bold mb-1">Generated Angle</h1>
       </div>
 
       <div className="space-y-6">

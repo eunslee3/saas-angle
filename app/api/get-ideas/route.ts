@@ -1,139 +1,23 @@
 import { NextResponse } from "next/server"
+import { supabase } from "@/lib/supabaseClient"
 
-export async function GET() {
-  // Mock data for SaaS product ideas
-  const ideas = [
-    {
-      "id": 1,
-      "title": "Jazzberry",
-      "tagline": "AI Agent for Bug Finding",
-      "mrr": "$200\n          /\n          month",
-      "link": "https://www.indiehackers.com/product/jazzberry"
-    },
-    {
-      "id": 2,
-      "title": "Homework",
-      "tagline": "A 3 - Tier Passive Income Funnel Built for Digital Hustlers",
-      "mrr": "$0\n          /\n          month",
-      "link": "https://www.indiehackers.com/product/homework"
-    },
-    {
-      "id": 3,
-      "title": "Emulation BerinX (Berina 6. Nesil)",
-      "tagline": "AI, HeartCore AI, Business AI, Emotional Intelligence",
-      "mrr": "$3\n          /\n          month",
-      "link": "https://www.indiehackers.com/product/emulation-berinx-berina-6-nesil"
-    },
-    {
-      "id": 4,
-      "title": "LinkBlink",
-      "tagline": "Upskill with context-rich, personalized learning bytes",
-      "mrr": "$0\n          /\n          month",
-      "link": "https://www.indiehackers.com/product/linkblink"
-    },
-    {
-      "id": 5,
-      "title": "Instant QR Menu",
-      "tagline": "AI menu maker turns printed restaurant menus to QR menu site",
-      "mrr": "$0\n          /\n          month",
-      "link": "https://www.indiehackers.com/product/instant-qr-menu"
-    },
-    {
-      "id": 6,
-      "title": "Bigzen",
-      "tagline": "Design and simulate your business model with AI — instantly",
-      "mrr": "$29\n          /\n          month",
-      "link": "https://www.indiehackers.com/product/bigzen"
-    },
-    {
-      "id": 7,
-      "title": "Astro",
-      "tagline": "proxy",
-      "mrr": "$100\n          /\n          month",
-      "link": "https://www.indiehackers.com/product/astro"
-    },
-    {
-      "id": 8,
-      "title": "Raposa Trading – The Arena for Competitive Traders",
-      "tagline": "The PokerStars of paper trading.",
-      "mrr": "$0\n          /\n          month",
-      "link": "https://www.indiehackers.com/product/raposa-trading-the-arena-for-competitive-traders"
-    },
-    {
-      "id": 9,
-      "title": "PalDock",
-      "tagline": "All-in-one platform for affiliate marketing and lead managem",
-      "mrr": "$11\n          /\n          month",
-      "link": "https://www.indiehackers.com/product/paldock"
-    },
-    {
-      "id": 10,
-      "title": "OneChat AI",
-      "tagline": "Your Pocket AI Companion",
-      "mrr": "$0\n          /\n          month",
-      "link": "https://www.indiehackers.com/product/onechat-ai"
-    },
-    {
-      "id": 11,
-      "title": "visernic",
-      "tagline": "Team of Creative Designers & Developers",
-      "mrr": "$25,899\n          /\n          month",
-      "link": "https://www.indiehackers.com/product/visernic"
-    },
-    {
-      "id": 12,
-      "title": "Leader's Edge",
-      "tagline": "Self-paced e-course developing emerging leaders",
-      "mrr": "$0\n          /\n          month",
-      "link": "https://www.indiehackers.com/product/leaders-edge"
-    },
-    {
-      "id": 13,
-      "title": "RCM Matter",
-      "tagline": "Top Notch Medical Billing Services Company",
-      "mrr": "$0\n          /\n          month",
-      "link": "https://www.indiehackers.com/product/rcm-matter"
-    },
-    {
-      "id": 14,
-      "title": "Flibbar",
-      "tagline": "Uncensored Social Media, Instant Messaging and File Sharing",
-      "mrr": "$0\n          /\n          month",
-      "link": "https://www.indiehackers.com/product/flibbar"
-    },
-    {
-      "id": 15,
-      "title": "Sheband",
-      "tagline": "It’s an app like uber but only for girls woman’s and kids",
-      "mrr": "$0\n          /\n          month",
-      "link": "https://www.indiehackers.com/product/sheband"
-    },
-    {
-      "id": 16,
-      "title": "Free Document Maker",
-      "tagline": "AI Tools to Instantly Create Invoices, PDFs, and More – Free",
-      "mrr": "$0\n          /\n          month",
-      "link": "https://www.indiehackers.com/product/free-document-maker"
-    },
-    {
-      "id": 17,
-      "title": "ShareAI",
-      "tagline": "Think Uber, but for AI Open Source Models",
-      "mrr": "$0\n          /\n          month",
-      "link": "https://www.indiehackers.com/product/shareai"
-    },
-    {
-      "id": 18,
-      "title": "HEIC to JPG Converter",
-      "tagline": "Convert your HEIC images to JPG format easily",
-      "mrr": "$0\n          /\n          month",
-      "link": "https://www.indiehackers.com/product/heic-to-jpg-converter"
-    }
-  ]
-  
 
-  // Add a small delay to simulate network latency
-  await new Promise((resolve) => setTimeout(resolve, 500))
+export async function GET(request: Request) {
+  const { searchParams } = new URL(request.url)
+  const page = parseInt(searchParams.get('page') || '1', 10)
+  const limit = 50
+  const from = (page - 1) * limit
+  const to = from + limit - 1
 
-  return NextResponse.json({ ideas })
+  const { data: ideas, error } = await supabase
+    .from('scraped_products')
+    .select('*')
+    .range(from, to)
+    .order('id', { ascending: false }) // Optional: newest first
+
+  if (error) {
+    return NextResponse.json({ error: error.message }, { status: 500 })
+  }
+
+  return NextResponse.json({ ideas, page })
 }

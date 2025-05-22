@@ -9,16 +9,18 @@ import Modal from "@/components/modal"
 
 export default function Home() {
   const [isModalOpen, setIsModalOpen] = useState(false)
+  const [currentPage, setCurrentPage] = useState(1)
   
-  const fetchProducts = async () => {
-    const response = await axios.get('/api/get-ideas')
+  const fetchProducts = async ({ queryKey }: { queryKey: (string | number)[] }) => {
+    const [_key, page] = queryKey;
+    const response = await axios.get(`/api/get-ideas?page=${page}`)
     return response.data.ideas
   }
   
-  const { data: products, isLoading, error } = useQuery({
-    queryKey: ['angle'],
-    queryFn: fetchProducts,
-  })
+  const { data: products, isLoading, error } = useQuery(
+    ['angle', currentPage],
+    fetchProducts
+  )
   
   return (
     <div className="space-y-8 py-4">
@@ -53,7 +55,27 @@ export default function Home() {
       </div>
       {isLoading && <div>Loading...</div>}
       {error && <div>Error in retrieving products</div>}
-      {products && <IdeaFeed products={products} setIsModalOpen={setIsModalOpen}/>}
+      {products && (
+        <>
+          <IdeaFeed products={products} setIsModalOpen={setIsModalOpen} />
+          <div className="flex justify-center mt-6 gap-4">
+            <button
+              onClick={() => setCurrentPage((p) => Math.max(1, p - 1))}
+              disabled={currentPage === 1}
+              className="px-4 py-2 border rounded-lg hover:bg-gray-100 disabled:opacity-50"
+            >
+              Prev
+            </button>
+            <span className="flex items-center">Page {currentPage}</span>
+            <button
+              onClick={() => setCurrentPage((p) => p + 1)}
+              className="px-4 py-2 border rounded-lg hover:bg-gray-100"
+            >
+              Next
+            </button>
+          </div>
+        </>
+      )}
 
       <Modal isOpen={isModalOpen} onClose={() => setIsModalOpen(false)}>
         <div className="space-y-4">
