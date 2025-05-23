@@ -1,53 +1,52 @@
 import React, { useState } from 'react'
 import { X } from 'lucide-react'
+import type { Products } from '@/lib/types'
+
 interface MRRFilterModalProps {
   isOpen: boolean
   onClose: () => void
   onApply: (min: number, max: number) => void
+  range: [number, number]
+  setRange: (range: [number, number]) => void
 }
+
 const MRR_OPTIONS = [
-  {
-    value: 0,
-    label: '$0',
-  },
-  {
-    value: 10000,
-    label: '$10k',
-  },
-  {
-    value: 100000,
-    label: '$100k',
-  },
-  {
-    value: 1000000,
-    label: '$100k+',
-  },
+  { value: 0, label: '$0' },
+  { value: 10000, label: '$10k' },
+  { value: 100000, label: '$100k' },
+  { value: 1000000, label: '$100k+' },
 ]
+
 export function MRRFilterModal({
   isOpen,
   onClose,
   onApply,
+  range,
+  setRange
 }: MRRFilterModalProps) {
-  const [range, setRange] = useState([0, 100000])
+  const [error, setError] = useState('')
+
   if (!isOpen) return null
+
   const handleChange = (value: number, isMin: boolean) => {
-    setRange((prev) => {
-      if (isMin) {
-        // Ensure min doesn't exceed max
-        return [Math.min(value, prev[1]), prev[1]]
-      } else {
-        // Ensure max doesn't go below min
-        return [prev[0], Math.max(value, prev[0])]
-      }
-    })
+    setError('')
+    if (isMin) {
+      setRange([value, Math.max(value, range[1])])
+    } else {
+      setRange([Math.min(value, range[0]), value])
+    }
   }
+
   const handleApply = () => {
     onApply(range[0], range[1])
     onClose()
   }
+
   const handleClear = () => {
     setRange([0, 100000])
+    setError('')
   }
+
   return (
     <div className="fixed inset-0 bg-gray-500/20 backdrop-blur-sm z-50 flex items-center justify-center p-4">
       <div
@@ -77,13 +76,11 @@ export function MRRFilterModal({
                   onChange={(e) => handleChange(Number(e.target.value), true)}
                   className="w-full px-3 py-2 bg-white border border-gray-200 rounded-md text-gray-900 text-sm focus:ring-2 focus:ring-blue-500 focus:border-transparent outline-none cursor-pointer"
                 >
-                  {MRR_OPTIONS.map(
-                    (option) => (
-                      <option key={option.value} value={option.value}>
-                        {option.label}
-                      </option>
-                    ),
-                  )}
+                  {MRR_OPTIONS.map((option) => (
+                    <option key={option.value} value={option.value}>
+                      {option.label}
+                    </option>
+                  ))}
                 </select>
                 <span className="text-gray-400">to</span>
                 <select
@@ -91,15 +88,18 @@ export function MRRFilterModal({
                   onChange={(e) => handleChange(Number(e.target.value), false)}
                   className="w-full px-3 py-2 bg-white border border-gray-200 rounded-md text-gray-900 text-sm focus:ring-2 focus:ring-blue-500 focus:border-transparent outline-none cursor-pointer"
                 >
-                  {MRR_OPTIONS.filter((option) => option.value >= range[0]).map(
+                  {MRR_OPTIONS.map(
                     (option) => (
                       <option key={option.value} value={option.value}>
                         {option.label}
                       </option>
-                    ),
+                    )
                   )}
                 </select>
               </div>
+              {error && (
+                <div className="text-red-500 text-sm mt-2">{error}</div>
+              )}
             </div>
             <div className="grid grid-cols-2 gap-3">
               <button

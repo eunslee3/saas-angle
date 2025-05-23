@@ -12,18 +12,32 @@ export default function Home() {
   const [isModalOpen, setIsModalOpen] = useState(false)
   const [isMRRFilterOpen, setIsMRRFilterOpen] = useState(false)
   const [currentPage, setCurrentPage] = useState(1)
+  const [range, setRange] = useState<[number, number]>([0, 100000])
+  const [searchTerm, setSearchTerm] = useState('')
   
   const fetchProducts = async ({ queryKey }: { queryKey: (string | number)[] }) => {
-    const [_key, page] = queryKey;
-    const response = await axios.get(`/api/get-ideas?page=${page}`)
+    const [_key, page, min, max] = queryKey
+    const response = await axios.get(`/api/get-ideas?page=${page}&min=${min}&max=${max}`)
     return response.data.ideas
   }
+
+  const { data: products, isLoading, error } = useQuery({
+    queryKey: ['angle', currentPage, range[0], range[1]],
+    queryFn: fetchProducts,
+    keepPreviousData: true,
+  })
+
+  const handleOnApply = (min: number, max: number) => {
+    setRange([min, max])
+  }
   
-  const { data: products, isLoading, error } = useQuery(
-    ['angle', currentPage],
-    fetchProducts
+  const filteredProducts = products?.filter(
+    (product: { title: string; tagline: string }) =>
+      product.title.toLowerCase().includes(searchTerm.toLowerCase()) ||
+      product.tagline.toLowerCase().includes(searchTerm.toLowerCase())
   )
   
+
   return (
     <>
     <div className="space-y-8 py-4">
@@ -39,6 +53,8 @@ export default function Home() {
           </div>
           <input
             type="text"
+            value={searchTerm}
+            onChange={(e) => setSearchTerm(e.target.value)}
             placeholder="Search ideas..."
             className="pl-10 pr-4 py-2 w-full border rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500"
           />
@@ -60,7 +76,7 @@ export default function Home() {
       {error && <div>Error in retrieving products</div>}
       {products && (
         <>
-          <IdeaFeed products={products} setIsModalOpen={setIsModalOpen} />
+          <IdeaFeed products={filteredProducts} setIsModalOpen={setIsModalOpen} />
           <div className="flex justify-center mt-6 gap-4">
             <button
               onClick={() => setCurrentPage((p) => Math.max(1, p - 1))}
@@ -84,9 +100,9 @@ export default function Home() {
     <MRRFilterModal
         isOpen={isMRRFilterOpen}
         onClose={() => setIsMRRFilterOpen(false)}
-        onApply={(min, max) => {
-          // handle filter logic here
-        }}
+        onApply={handleOnApply}
+        range={range}
+        setRange={setRange}
       />
     </>
   )
