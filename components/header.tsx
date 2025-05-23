@@ -12,7 +12,7 @@ export default function Header() {
       <div className="container mx-auto px-4 max-w-7xl">
         <div className="flex items-center justify-between h-16">
           <div className="flex-shrink-0 font-bold text-xl">
-            <Link href="/">SaaS Twist</Link>
+            <Link href="/">Beachhead</Link>
           </div>
 
           <div>
