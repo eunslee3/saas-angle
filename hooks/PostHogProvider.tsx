@@ -1,24 +1,26 @@
+// app/providers.jsx
 'use client'
 
+import posthog from 'posthog-js'
+import { PostHogProvider as PHProvider } from 'posthog-js/react'
 import { useEffect } from 'react'
-import { initPostHog } from '@/lib/posthogClient'
-import { usePathname, useSearchParams } from "next/navigation"
-import posthog from '@/lib/posthogClient'
 
-export default function PostHogProvider({ children }: { children: React.ReactNode }) {
+export function PostHogProvider({ children }: { children: React.ReactNode }) {
   useEffect(() => {
-    initPostHog()
+    if (!process.env.NEXT_PUBLIC_POSTHOG_KEY || !process.env.NEXT_PUBLIC_POSTHOG_HOST) {
+      console.error('PostHog environment variables are not defined')
+      return
+    }
+    
+    posthog.init(process.env.NEXT_PUBLIC_POSTHOG_KEY, {
+      api_host: process.env.NEXT_PUBLIC_POSTHOG_HOST,
+      capture_pageview: 'history_change'
+    })
   }, [])
 
-  useEffect(() => {
-    posthog.capture('$pageview');
-  }, [usePathname, useSearchParams]);
-
-  useEffect(() => {
-    const onBeforeUnload = () => posthog.capture('$pageleave')
-    window.addEventListener('beforeunload', onBeforeUnload)
-    return () => window.removeEventListener('beforeunload', onBeforeUnload)
-  }, [])
-
-  return null
+  return (
+    <PHProvider client={posthog}>
+      {children}
+    </PHProvider>
+  )
 }
