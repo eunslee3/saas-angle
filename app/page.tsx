@@ -37,8 +37,6 @@ export default function Home() {
       product.tagline.toLowerCase().includes(searchTerm.toLowerCase())
   )
 
-  console.log('HELLO IS THIS PROD?')
-
   return (
     <>
     <div className="space-y-8 py-4">
