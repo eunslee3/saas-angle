@@ -41,6 +41,8 @@ export default function Home() {
     posthog.capture('landed_on_ideas_page');
   }, []);
 
+  console.log('HELLO IS THIS PROD?')
+
   return (
     <>
     <div className="space-y-8 py-4">
