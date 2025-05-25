@@ -1,5 +1,5 @@
 "use client"
-import { useState } from "react"
+import { useState, useEffect } from "react"
 import IdeaFeed from "@/components/idea-feed"
 import { Search } from "lucide-react"
 import { useQuery  } from '@tanstack/react-query'
@@ -37,7 +37,9 @@ export default function Home() {
       product.tagline.toLowerCase().includes(searchTerm.toLowerCase())
   )
   
-  posthog.capture('landed_on_ideas_page');
+  useEffect(() => {
+    posthog.capture('landed_on_ideas_page');
+  }, []);
 
   return (
     <>
