@@ -6,7 +6,7 @@ import { useQuery  } from '@tanstack/react-query'
 import axios from "axios"
 import LoadingModal from "@/components/loading-modal"
 import { MRRFilterModal } from "@/components/mrr-filter-modal"
-import posthog from "@/lib/posthogClient"
+import posthog from "@/lib/postHogClient"
 
 export default function Home() {
   const [isModalOpen, setIsModalOpen] = useState(false)

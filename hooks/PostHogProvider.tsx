@@ -1,9 +1,9 @@
 'use client'
 
 import { useEffect } from 'react'
-import { initPostHog } from '@/lib/posthogClient'
+import { initPostHog } from '@/lib/postHogClient'
 import { usePathname, useSearchParams } from "next/navigation"
-import posthog from '@/lib/posthogClient'
+import posthog from '@/lib/postHogClient'
 
 export default function PostHogProvider({ children }: { children: React.ReactNode }) {
   useEffect(() => {
