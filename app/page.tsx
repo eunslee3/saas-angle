@@ -2,11 +2,11 @@
 import { useState } from "react"
 import IdeaFeed from "@/components/idea-feed"
 import { Search } from "lucide-react"
-import Link from "next/link"
-import { useQuery, useMutation  } from '@tanstack/react-query'
+import { useQuery  } from '@tanstack/react-query'
 import axios from "axios"
 import LoadingModal from "@/components/loading-modal"
 import { MRRFilterModal } from "@/components/mrr-filter-modal"
+import posthog from "@/lib/posthogClient"
 
 export default function Home() {
   const [isModalOpen, setIsModalOpen] = useState(false)
@@ -37,6 +37,7 @@ export default function Home() {
       product.tagline.toLowerCase().includes(searchTerm.toLowerCase())
   )
   
+  posthog.capture('landed_on_ideas_page');
 
   return (
     <>
