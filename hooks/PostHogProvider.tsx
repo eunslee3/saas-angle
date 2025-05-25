@@ -2,10 +2,22 @@
 
 import { useEffect } from 'react'
 import { initPostHog } from '@/lib/posthogClient'
+import { usePathname, useSearchParams } from "next/navigation"
+import posthog from '@/lib/posthogClient'
 
-export default function PostHogProvider() {
+export default function PostHogProvider({ children }: { children: React.ReactNode }) {
   useEffect(() => {
     initPostHog()
+  }, [])
+
+  useEffect(() => {
+    posthog.capture('$pageview');
+  }, [usePathname, useSearchParams]);
+
+  useEffect(() => {
+    const onBeforeUnload = () => posthog.capture('$pageleave')
+    window.addEventListener('beforeunload', onBeforeUnload)
+    return () => window.removeEventListener('beforeunload', onBeforeUnload)
   }, [])
 
   return null
