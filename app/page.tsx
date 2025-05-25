@@ -7,6 +7,7 @@ import axios from "axios"
 import LoadingModal from "@/components/loading-modal"
 import { MRRFilterModal } from "@/components/mrr-filter-modal"
 import posthog from "@/lib/posthogClient"
+import { usePathname, useSearchParams } from "next/navigation"
 
 export default function Home() {
   const [isModalOpen, setIsModalOpen] = useState(false)
@@ -38,8 +39,8 @@ export default function Home() {
   )
   
   useEffect(() => {
-    posthog.capture('landed_on_ideas_page');
-  }, []);
+    posthog.capture('$pageview');
+  }, [usePathname, useSearchParams]);
 
   console.log('HELLO IS THIS PROD?')
 
