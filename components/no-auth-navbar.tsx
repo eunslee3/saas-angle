@@ -9,7 +9,7 @@ export const Navbar = () => {
         <div className="flex items-center justify-between h-16">
           <div className="flex items-center space-x-2">
             <div className="w-8 h-8 bg-gradient-to-r from-blue-600 to-cyan-500 rounded-lg animate-gradient" />
-            <span onClick={() => router.push('/landingpage')} className="text-xl font-semibold text-gray-900 dark:text-white">
+            <span onClick={() => router.push('/landingpage')} className="cursor-pointer text-xl font-semibold text-gray-900 dark:text-white">
               Beachhead
             </span>
           </div>
