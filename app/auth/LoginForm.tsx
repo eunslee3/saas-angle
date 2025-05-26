@@ -32,7 +32,8 @@ export const LoginForm = ({
       router.push('/')
     },
     onError: (err: Error) => {
-      setError(err.message)
+      console.log(err)
+      setError(err.response.data.error)
     },
   })
 
