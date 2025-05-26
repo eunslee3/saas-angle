@@ -12,8 +12,11 @@ export async function POST(request: Request) {
     const { email, password, rememberMe } = body
     const isProduction = process.env.NODE_ENV === 'production'
 
+    console.log('Login request received')
+
     // Basic validation
     if (!email || !password) {
+      console.log('Missing required fields')
       return NextResponse.json({ error: "Email and password are required" }, { status: 400 })
     }
 
@@ -25,12 +28,14 @@ export async function POST(request: Request) {
       .single()
 
     if (error || !user) {
+      console.log('User not found')
       return NextResponse.json({ error: "Invalid credentials" }, { status: 401 })
     }
 
     // Compare password
     const passwordMatch = await bcrypt.compare(password, user.password_hash)
     if (!passwordMatch) {
+      console.log('Invalid credentials')
       return NextResponse.json({ error: "Invalid credentials" }, { status: 401 })
     }
 
@@ -66,7 +71,7 @@ export async function POST(request: Request) {
       })
     }
 
-    console.log(response.headers.getSetCookie())
+    console.log('Response: ', response)
 
     return response
   } catch (err) {

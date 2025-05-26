@@ -9,7 +9,7 @@ const JWT_SECRET = process.env.JWT_SECRET!
 export async function POST(req: Request) {
   const { firstName, lastName, email, password } = await req.json()
 
-  console.log({
+  console.log('User Information:', {
     firstName,
     lastName,
     email,
@@ -17,6 +17,7 @@ export async function POST(req: Request) {
   })
 
   if (!firstName || !lastName || !email || !password) {
+    console.log('Missing required fields')
     return NextResponse.json({ error: 'Missing required fields' }, { status: 400 })
   }
 
@@ -27,6 +28,7 @@ export async function POST(req: Request) {
     .single()
 
   if (existingUser) {
+    console.log('User already exists')
     return NextResponse.json({ error: 'User already exists' }, { status: 409 })
   }
 
@@ -42,6 +44,8 @@ export async function POST(req: Request) {
     return NextResponse.json({ error: error.message }, { status: 500 })
   }
 
+  console.log('User created successfully: ', user)
+
   const token = jwt.sign({ userId: user.id, email }, JWT_SECRET, { expiresIn: '7d' })
 
   const response = NextResponse.json({ success: true })
@@ -51,5 +55,8 @@ export async function POST(req: Request) {
     path: '/',
     maxAge: 60 * 60 * 24 * 7,
   })
+
+  console.log('Response: ', response)
+
   return response
 }
