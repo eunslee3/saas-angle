@@ -5,7 +5,7 @@ import { initPostHog } from '@/lib/postHogClient'
 import { usePathname, useSearchParams } from "next/navigation"
 import posthog from '@/lib/postHogClient'
 
-export default function PostHogProvider({ children }: { children: React.ReactNode }) {
+export default function PostHogProvider() {
   useEffect(() => {
     initPostHog()
   }, [])
