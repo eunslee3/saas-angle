@@ -9,7 +9,8 @@ const JWT_SECRET = process.env.JWT_SECRET!
 export async function POST(request: Request) {
   try {
     const body = await request.json()
-    const { email, password } = body
+    const { email, password, rememberMe } = body
+    const isProduction = process.env.NODE_ENV === 'production'
 
     // Basic validation
     if (!email || !password) {
@@ -47,12 +48,26 @@ export async function POST(request: Request) {
         email: user.email,
       },
     })
-    response.cookies.set("auth_token", token, {
-      httpOnly: true,
-      secure: true,
-      path: "/",
-      maxAge: 60 * 60 * 24 * 7, // 7 days
-    })
+
+    if (rememberMe) {
+      response.cookies.set("auth_token", token, {
+        httpOnly: true,
+        secure: isProduction,
+        path: "/",
+        maxAge: 60 * 60 * 24 * 30 // 30 days
+      })
+    } else {
+      console.log('no remember me')
+      // No session duration - cookie will expire when browser is closed
+      response.cookies.set("auth_token", token, {
+        httpOnly: true,
+        secure: isProduction,
+        path: "/"
+      })
+    }
+
+    console.log(response.headers.getSetCookie())
+
     return response
   } catch (err) {
     console.error("Login error:", err)

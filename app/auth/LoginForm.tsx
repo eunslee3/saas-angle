@@ -5,7 +5,7 @@ import { Input } from './Input';
 import { OAuthButtons } from './OAuthButtons';
 import { useRouter } from 'next/navigation';
 import { useMutation } from '@tanstack/react-query';
-import axios from 'axios';
+import axios, { AxiosError } from 'axios';
 
 interface LoginFormProps {
   onSignUpClick: () => void;
@@ -16,14 +16,16 @@ export const LoginForm = ({
 }: LoginFormProps) => {
   const [email, setEmail] = useState('')
   const [password, setPassword] = useState('')
+  const [rememberMe, setRememberMe] = useState(false)
   const [error, setError] = useState('')
   const router = useRouter()
 
   const mutation = useMutation({
-    mutationFn: async ({ email, password }: { email: string; password: string }) => {
+    mutationFn: async ({ email, password, rememberMe }: { email: string; password: string; rememberMe: boolean }) => {
       const res = await axios.post('/api/auth/login', {
         email,
-        password
+        password,
+        rememberMe
       })
 
       return res.data
@@ -31,9 +33,9 @@ export const LoginForm = ({
     onSuccess: () => {
       router.push('/')
     },
-    onError: (err: Error) => {
+    onError: (err: AxiosError<any>) => {
       console.log(err)
-      setError(err.response.data.error)
+      setError(err.response?.data?.error || "An error occurred")
     },
   })
 
@@ -41,7 +43,7 @@ export const LoginForm = ({
     e.preventDefault()
     setError('')
 
-    mutation.mutate({ email, password })
+    mutation.mutate({ email, password, rememberMe })
   }
 
   return <div className="space-y-8">
@@ -62,7 +64,7 @@ export const LoginForm = ({
           <Input onChange={(e) => setPassword(e.target.value)} value={password} label="Password" type="password" placeholder="Enter your password" required showPasswordToggle />
           <div className="flex items-center justify-between">
             <label className="flex items-center space-x-2 cursor-pointer group">
-              <input type="checkbox" className="w-4 h-4 rounded border-gray-300 dark:border-gray-600 text-blue-600 focus:ring-blue-500/20 dark:bg-gray-900/50" />
+              <input onClick={() => setRememberMe(!rememberMe)} type="checkbox" className="w-4 h-4 rounded border-gray-300 dark:border-gray-600 text-blue-600 focus:ring-blue-500/20 dark:bg-gray-900/50" />
               <span className="text-sm text-gray-600 dark:text-gray-300 group-hover:text-gray-900 dark:group-hover:text-white transition-colors">
                 Remember me
               </span>
