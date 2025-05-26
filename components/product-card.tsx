@@ -55,10 +55,6 @@ export default function ProductCard({ product, setIsModalOpen }: { product: Prod
 
         <div className="flex items-center gap-4 text-sm mb-6">
           <div className="font-medium text-green-700">{product?.mrr} MRR</div>
-          <div className="text-gray-500 flex items-center">
-            <span className="w-1 h-1 bg-gray-300 rounded-full mx-1"></span>
-            {product?.founders}
-          </div>
         </div>
       </div>
 
