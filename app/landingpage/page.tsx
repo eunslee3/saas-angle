@@ -1,7 +1,6 @@
 'use client'
 
 import React from 'react';
-import { Navbar } from './Navbar';
 import { Hero } from './Hero';
 import { Benefits } from './Benefits';
 import { HowItWorks } from './HowItWorks';
@@ -9,6 +8,7 @@ import { DemoSection } from './DemoSection';
 import { Testimonials } from './Testimonials';
 import { CTABanner } from './CTABanner';
 import { Footer } from './Footer';
+import { Navbar } from '@/components/no-auth-navbar';
 
 export default function LandingPage() {
   return (

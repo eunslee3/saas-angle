@@ -7,5 +7,9 @@ export default function AuthenticatedLayout({
 }) {
   requireAuth()
 
-  return <>{children}</>
+  return (
+    <>
+      {children}
+    </>
+  )
 }
