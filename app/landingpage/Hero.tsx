@@ -24,14 +24,6 @@ export const Hero = () => {
               See examples
             </button>
           </div>
-          <div className="mt-20">
-            <p className="text-sm text-gray-600 dark:text-gray-400 mb-6">
-              Backed by builders from
-            </p>
-            <div className="flex items-center justify-center space-x-8">
-              {[...Array(4)].map((_, i) => <div key={i} className="h-8 w-24 rounded-md bg-gray-200 dark:bg-gray-800" />)}
-            </div>
-          </div>
         </div>
       </div>
     </div>;
