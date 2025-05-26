@@ -24,6 +24,6 @@ export function middleware(request: NextRequest) {
 // See "Matching Paths" below to learn more
 export const config = {
   matcher: [
-    '/((?!_next|favicon.ico|auth|landingpage|api/auth).*)',
+    '/((?!_next|favicon.ico|auth|landing-page|api/auth).*)',
   ],
 }

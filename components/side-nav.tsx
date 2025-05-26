@@ -1,4 +1,6 @@
-import React from 'react'
+'use client'
+
+import React, { useState } from 'react'
 import {
   Menu,
   X,
@@ -8,6 +10,8 @@ import {
   Settings,
   HelpCircle,
 } from 'lucide-react'
+import Image from 'next/image'
+
 interface SidebarProps {
   isOpen: boolean
   onToggle: () => void
@@ -41,7 +45,10 @@ const bottomNavItems = [
     href: '/help',
   },
 ]
-export default function Header({ isOpen, onToggle }: SidebarProps) {
+export default function SideNav() {
+  const [isOpen, setIsOpen] = useState(false)
+  const onToggle = () => setIsOpen(!isOpen)
+
   return (
     <>
       {/* Mobile overlay */}
@@ -65,7 +72,7 @@ export default function Header({ isOpen, onToggle }: SidebarProps) {
         {/* Logo section */}
         <div className="h-16 flex items-center px-4 border-b border-gray-200 dark:border-gray-800">
           <div className="flex items-center space-x-2 flex-1">
-            <div className="w-8 h-8 bg-gradient-to-r from-blue-600 to-cyan-500 rounded-lg animate-gradient" />
+            <Image src='beachhead_logo1.svg' alt='Beachhead Logo' width={32} height={32} />
             <span className="text-lg font-semibold text-gray-900 dark:text-white">
               Beachhead
             </span>
@@ -105,12 +112,14 @@ export default function Header({ isOpen, onToggle }: SidebarProps) {
         </div>
       </div>
       {/* Toggle button for larger screens */}
+      {!isOpen && (
       <button
         onClick={onToggle}
         className="fixed top-4 left-4 z-40 lg:hidden bg-white dark:bg-gray-900 p-2 rounded-lg border border-gray-200 dark:border-gray-800 text-gray-600 dark:text-gray-300 hover:text-gray-900 dark:hover:text-white"
       >
         <Menu className="w-5 h-5" />
       </button>
+      )}
     </>
   )
 }

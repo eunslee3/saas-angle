@@ -1,4 +1,4 @@
-import Header from '@/components/header'
+import SideNav from '@/components/side-nav'
 import { requireAuth } from '@/lib/authGuard'
 
 export default function AuthenticatedLayout({
@@ -10,7 +10,7 @@ export default function AuthenticatedLayout({
 
   return (
     <>
-    <Header />
+    <SideNav />
     <main className="container mx-auto px-4 py-4 max-w-7xl">
       {children}
     </main>
