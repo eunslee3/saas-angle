@@ -7,6 +7,7 @@ import { Providers } from "./providers"
 import { Toaster } from "@/components/ui/toaster"
 import PostHogProvider from "@/hooks/PostHogProvider"
 const inter = Inter({ subsets: ["latin"] })
+import { requireAuth } from "@/lib/authGuard"
 
 export const metadata: Metadata = {
   title: "Beachhead",
@@ -19,6 +20,7 @@ export default function RootLayout({
 }: {
   children: React.ReactNode
 }) {
+  requireAuth() // This will redirect to login if the user is not authenticated
   return (
     <html lang="en">
       <body className={inter.className}>

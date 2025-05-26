@@ -1,13 +1,11 @@
 'use client'
 
 import React from 'react';
-
 interface AuthLayoutProps {
   children: React.ReactNode;
   title: string;
   subtitle?: string;
 }
-
 export const AuthLayout = ({
   children,
   title,
@@ -27,7 +25,7 @@ export const AuthLayout = ({
             <div className="flex items-center space-x-2">
               <div className="w-8 h-8 bg-gradient-to-r from-blue-600 to-blue-700 rounded-lg animate-gradient" />
               <span className="text-xl font-semibold text-gray-900 dark:text-white">
-                Beachhead
+                DevLaunch
               </span>
             </div>
             <div className="mt-8 lg:mt-12">
