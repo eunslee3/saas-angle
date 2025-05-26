@@ -5,6 +5,7 @@ import { Input } from './Input';
 import { OAuthButtons } from './OAuthButtons';
 import { useRouter } from 'next/navigation';
 import { useMutation } from '@tanstack/react-query';
+import axios from 'axios';
 
 interface SignupFormProps {
   onSignInClick: () => void;
@@ -20,25 +21,20 @@ export const SignupForm = ({
   const [agreed, setAgreed] = useState(false)
   const [error, setError] = useState('')
   const router = useRouter()
-  
 
   const mutation = useMutation({
     mutationFn: async ({ email, password }: { email: string; password: string }) => {
-      const res = await fetch('/api/auth/signup', {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ email, password }),
+      const res = await axios.post('/api/auth/signup', {
+        firstName,
+        lastName,
+        email,
+        password
       })
 
-      if (!res.ok) {
-        const { error } = await res.json()
-        throw new Error(error || 'Signup failed')
-      }
-
-      return res.json()
+      return res.data
     },
     onSuccess: () => {
-      router.push('/angle')
+      router.push('/')
     },
     onError: (err: Error) => {
       setError(err.message)
@@ -68,7 +64,6 @@ export const SignupForm = ({
 
     mutation.mutate({ email, password })
   }
-  
 
   return <div className="space-y-8">
       <OAuthButtons />
@@ -84,10 +79,10 @@ export const SignupForm = ({
       </div>
       <form className="space-y-5">
         <div className="grid grid-cols-2 gap-4">
-          <Input label="First name" type="text" placeholder="John" required />
-          <Input label="Last name" type="text" placeholder="Doe" required />
+          <Input onChange={(e) => setFirstName(e.target.value)} value={firstName} label="First name" type="text" placeholder="John" required />
+          <Input onChange={(e) => setLastName(e.target.value)} value={lastName} label="Last name" type="text" placeholder="Doe" required />
         </div>
-        <Input label="Email address" type="email" placeholder="you@example.com" required />
+        <Input onChange={(e) => setEmail(e.target.value)} value={email} label="Email address" type="email" placeholder="you@example.com" required />
         <div className="space-y-5">
           <Input onChange={(e) => setPassword(e.target.value)} value={password} label="Password" type="password" placeholder="Create a password" required showPasswordToggle />
           <Input onChange={(e) => setConfirmPassword(e.target.value)} value={confirmPassword} label="Confirm password" type="password" placeholder="Confirm your password" required showPasswordToggle />

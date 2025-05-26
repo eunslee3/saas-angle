@@ -1,12 +1,48 @@
-import React from 'react';
+'use client'
+
+import React, { useState } from 'react';
 import { Input } from './Input';
 import { OAuthButtons } from './OAuthButtons';
+import { useRouter } from 'next/navigation';
+import { useMutation } from '@tanstack/react-query';
+import axios from 'axios';
+
 interface LoginFormProps {
   onSignUpClick: () => void;
 }
+
 export const LoginForm = ({
   onSignUpClick
 }: LoginFormProps) => {
+  const [email, setEmail] = useState('')
+  const [password, setPassword] = useState('')
+  const [error, setError] = useState('')
+  const router = useRouter()
+
+  const mutation = useMutation({
+    mutationFn: async ({ email, password }: { email: string; password: string }) => {
+      const res = await axios.post('/api/auth/login', {
+        email,
+        password
+      })
+
+      return res.data
+    },
+    onSuccess: () => {
+      router.push('/')
+    },
+    onError: (err: Error) => {
+      setError(err.message)
+    },
+  })
+
+  const handleSubmit = (e: React.FormEvent) => {
+    e.preventDefault()
+    setError('')
+
+    mutation.mutate({ email, password })
+  }
+
   return <div className="space-y-8">
       <OAuthButtons />
       <div className="relative">
@@ -20,9 +56,9 @@ export const LoginForm = ({
         </div>
       </div>
       <form className="space-y-5">
-        <Input label="Email address" type="email" placeholder="you@example.com" required />
+        <Input onChange={(e) => setEmail(e.target.value)} value={email} label="Email address" type="email" placeholder="you@example.com" required />
         <div className="space-y-5">
-          <Input label="Password" type="password" placeholder="Enter your password" required showPasswordToggle />
+          <Input onChange={(e) => setPassword(e.target.value)} value={password} label="Password" type="password" placeholder="Enter your password" required showPasswordToggle />
           <div className="flex items-center justify-between">
             <label className="flex items-center space-x-2 cursor-pointer group">
               <input type="checkbox" className="w-4 h-4 rounded border-gray-300 dark:border-gray-600 text-blue-600 focus:ring-blue-500/20 dark:bg-gray-900/50" />
@@ -35,9 +71,10 @@ export const LoginForm = ({
             </button>
           </div>
         </div>
-        <button type="submit" className="w-full px-4 py-3 mt-2 text-white bg-gradient-to-r from-blue-600 to-blue-700 rounded-lg hover:from-blue-700 hover:to-blue-800 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-2 dark:focus:ring-offset-gray-800 transition-all duration-200 hover:scale-[1.02] animate-gradient font-medium">
+        <button onClick={handleSubmit} type="submit" className="w-full px-4 py-3 mt-2 text-white bg-gradient-to-r from-blue-600 to-blue-700 rounded-lg hover:from-blue-700 hover:to-blue-800 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-2 dark:focus:ring-offset-gray-800 transition-all duration-200 hover:scale-[1.02] animate-gradient font-medium">
           Start building securely →
         </button>
+        {error ? <p className="text-sm text-red-500 mt-2">{error}</p> : null}
       </form>
       <p className="text-center text-sm text-gray-600 dark:text-gray-300">
         Don't have an account?{' '}

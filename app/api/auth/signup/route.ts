@@ -7,7 +7,18 @@ import { supabase } from '@/lib/supabaseClient'
 const JWT_SECRET = process.env.JWT_SECRET!
 
 export async function POST(req: Request) {
-  const { email, password } = await req.json()
+  const { firstName, lastName, email, password } = await req.json()
+
+  console.log({
+    firstName,
+    lastName,
+    email,
+    password
+  })
+
+  if (!firstName || !lastName || !email || !password) {
+    return NextResponse.json({ error: 'Missing required fields' }, { status: 400 })
+  }
 
   const { data: existingUser } = await supabase
     .from('users')
@@ -23,7 +34,7 @@ export async function POST(req: Request) {
 
   const { data: user, error } = await supabase
     .from('users')
-    .insert({ email, password_hash })
+    .insert({ email, password_hash, first_name: firstName, last_name: lastName })
     .select()
     .single()
 

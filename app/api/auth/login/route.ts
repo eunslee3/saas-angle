@@ -1,4 +1,10 @@
 import { NextResponse } from "next/server"
+import { cookies } from "next/headers"
+import bcrypt from "bcrypt"
+import jwt from "jsonwebtoken"
+import { supabase } from "@/lib/supabaseClient"
+
+const JWT_SECRET = process.env.JWT_SECRET!
 
 export async function POST(request: Request) {
   try {
@@ -10,29 +16,46 @@ export async function POST(request: Request) {
       return NextResponse.json({ error: "Email and password are required" }, { status: 400 })
     }
 
-    // Simulate authentication delay
-    await new Promise((resolve) => setTimeout(resolve, 1000))
+    // Lookup user by email
+    const { data: user, error } = await supabase
+      .from("users")
+      .select("id, email, password_hash")
+      .eq("email", email)
+      .single()
 
-    // Mock authentication logic
-    // In a real app, you would verify credentials against a database
-    if (email.includes("@") && password.length >= 6) {
-      // Mock successful authentication
-      return NextResponse.json({
-        success: true,
-        token: "mock_jwt_token_" + Math.random().toString(36).substring(2, 15),
-        user: {
-          id: "user_123",
-          email,
-          name: email.split("@")[0],
-          createdAt: new Date().toISOString(),
-        },
-      })
-    } else {
-      // Mock authentication failure
-      return NextResponse.json({ success: false, error: "Invalid credentials" }, { status: 401 })
+    if (error || !user) {
+      return NextResponse.json({ error: "Invalid credentials" }, { status: 401 })
     }
-  } catch (error) {
-    console.error("Login error:", error)
-    return NextResponse.json({ success: false, error: "Authentication failed" }, { status: 500 })
+
+    // Compare password
+    const passwordMatch = await bcrypt.compare(password, user.password_hash)
+    if (!passwordMatch) {
+      return NextResponse.json({ error: "Invalid credentials" }, { status: 401 })
+    }
+
+    // Create JWT
+    const token = jwt.sign(
+      { userId: user.id, email: user.email },
+      JWT_SECRET,
+      { expiresIn: "7d" }
+    )
+
+    const response = NextResponse.json({
+      success: true,
+      user: {
+        id: user.id,
+        email: user.email,
+      },
+    })
+    response.cookies.set("auth_token", token, {
+      httpOnly: true,
+      secure: true,
+      path: "/",
+      maxAge: 60 * 60 * 24 * 7, // 7 days
+    })
+    return response
+  } catch (err) {
+    console.error("Login error:", err)
+    return NextResponse.json({ error: "Authentication failed" }, { status: 500 })
   }
 }
