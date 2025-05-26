@@ -1,6 +1,8 @@
 'use client'
 
 import React from 'react';
+import Image from 'next/image';
+import { useRouter } from 'next/navigation';
 
 interface AuthLayoutProps {
   children: React.ReactNode;
@@ -13,6 +15,8 @@ export const AuthLayout = ({
   title,
   subtitle
 }: AuthLayoutProps) => {
+  const router = useRouter();
+
   return <div className="min-h-screen w-full bg-gray-50 dark:bg-gray-900 relative overflow-hidden">
       {/* Background Effect */}
       <div className="absolute inset-0 overflow-hidden">
@@ -25,8 +29,8 @@ export const AuthLayout = ({
         <div className="w-full lg:w-[580px] bg-white/70 dark:bg-gray-800/70 backdrop-blur-xl p-8 lg:p-12 flex flex-col justify-between border-b lg:border-r border-gray-200/50 dark:border-gray-700/50">
           <div>
             <div className="flex items-center space-x-2">
-              <div className="w-8 h-8 bg-gradient-to-r from-blue-600 to-blue-700 rounded-lg animate-gradient" />
-              <span className="text-xl font-semibold text-gray-900 dark:text-white">
+              <Image src='/beachhead_logo1.svg' alt='Beachhead Logo' width={32} height={32} />
+              <span onClick={() => router.push('/landing-page')} className="text-xl font-semibold text-gray-900 dark:text-white cursor-pointer">
                 Beachhead
               </span>
             </div>

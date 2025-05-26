@@ -1,5 +1,6 @@
 import React from 'react'
 import { useRouter } from 'next/navigation'
+import Image from 'next/image'
 
 export const Navbar = () => {
   const router = useRouter()
@@ -8,7 +9,7 @@ export const Navbar = () => {
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         <div className="flex items-center justify-between h-16">
           <div className="flex items-center space-x-2">
-            <div className="w-8 h-8 bg-gradient-to-r from-blue-600 to-cyan-500 rounded-lg animate-gradient" />
+            <Image src='beachhead_logo1.svg' alt='Beachhead Logo' width={32} height={32} />
             <span onClick={() => router.push('/landingpage')} className="cursor-pointer text-xl font-semibold text-gray-900 dark:text-white">
               Beachhead
             </span>

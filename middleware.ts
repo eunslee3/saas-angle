@@ -24,6 +24,7 @@ export function middleware(request: NextRequest) {
 // See "Matching Paths" below to learn more
 export const config = {
   matcher: [
-    '/((?!_next|favicon.ico|auth|landing-page|api/auth).*)',
+    // Exclude API routes, static files, favicon, auth/landing pages, and the logo SVG
+    '/((?!api|_next|favicon.ico|auth|landing-page|beachhead_logo1.svg|ben.jpg|sarah.jpg|mike.jpg).*)',
   ],
 }

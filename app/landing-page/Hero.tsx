@@ -1,7 +1,10 @@
 import React from 'react';
 import { SparklesIcon } from 'lucide-react';
+import { useRouter } from 'next/navigation';
+
 export const Hero = () => {
-  return <div className="relative overflow-hidden pt-32 pb-20">
+  const router = useRouter();
+  return <div className="relative overflow-hidden pt-48 pb-36">
       <div className="absolute inset-0 overflow-hidden">
         <div className="absolute -top-1/2 -right-1/2 w-[1000px] h-[1000px] rounded-full bg-gradient-to-r from-blue-100/30 to-cyan-100/30 dark:from-blue-900/20 dark:to-cyan-900/20 blur-3xl" />
         <div className="absolute -bottom-1/2 -left-1/2 w-[1000px] h-[1000px] rounded-full bg-gradient-to-r from-blue-100/30 to-cyan-100/30 dark:from-blue-900/20 dark:to-cyan-900/20 blur-3xl" />
@@ -17,7 +20,7 @@ export const Hero = () => {
             revenue-generating products.
           </p>
           <div className="mt-10 flex items-center justify-center space-x-4">
-            <button className="px-8 py-4 bg-gradient-to-r from-blue-600 to-cyan-500 text-white font-medium rounded-lg hover:from-blue-700 hover:to-cyan-600 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-2 dark:focus:ring-offset-gray-900 transition-all duration-200 hover:scale-[1.02] animate-gradient">
+            <button onClick={() => router.push('/auth')} className="px-8 py-4 bg-gradient-to-r from-blue-600 to-cyan-500 text-white font-medium rounded-lg hover:from-blue-700 hover:to-cyan-600 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-2 dark:focus:ring-offset-gray-900 transition-all duration-200 hover:scale-[1.02] animate-gradient">
               Try it free →
             </button>
             <button className="px-8 py-4 text-gray-600 dark:text-gray-300 hover:text-gray-900 dark:hover:text-white font-medium transition-colors">

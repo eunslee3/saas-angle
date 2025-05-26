@@ -8,6 +8,8 @@ import {
   ShieldCheckIcon,
   RocketIcon,
 } from 'lucide-react'
+import { useRouter } from 'next/navigation';
+
 const benefitTiles = [
   {
     gradient: 'from-blue-400/80 to-blue-600/80',
@@ -40,6 +42,8 @@ const benefitTiles = [
   },
 ]
 export const Benefits = () => {
+  const router = useRouter();
+
   return (
     <div className="py-24 bg-white/50 dark:bg-gray-900/50">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
@@ -80,7 +84,7 @@ export const Benefits = () => {
           ))}
         </div>
         <div className="mt-16 text-center">
-          <button className="inline-flex items-center space-x-2 text-sm font-medium text-gray-900 dark:text-white hover:text-blue-600 dark:hover:text-blue-400 transition-colors">
+          <button onClick={() => router.push('/auth')} className="inline-flex items-center space-x-2 text-sm font-medium text-gray-900 dark:text-white hover:text-blue-600 dark:hover:text-blue-400 transition-colors">
             <span>Start building your SaaS</span>
             <ArrowRightIcon className="w-4 h-4" />
           </button>

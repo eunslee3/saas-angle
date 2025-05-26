@@ -75,7 +75,7 @@ export const LoginForm = ({
           </div>
         </div>
         <button onClick={handleSubmit} type="submit" className="w-full px-4 py-3 mt-2 text-white bg-gradient-to-r from-blue-600 to-blue-700 rounded-lg hover:from-blue-700 hover:to-blue-800 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-2 dark:focus:ring-offset-gray-800 transition-all duration-200 hover:scale-[1.02] animate-gradient font-medium">
-          Start building securely →
+          Start Building →
         </button>
         {error ? <p className="text-sm text-red-500 mt-2">{error}</p> : null}
       </form>

@@ -1,11 +1,13 @@
 import React from 'react';
+import Image from 'next/image'
+
 export const Footer = () => {
   return <footer className="py-12 bg-white dark:bg-gray-900 border-t border-gray-200 dark:border-gray-800">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
           <div>
             <div className="flex items-center space-x-2 mb-4">
-              <div className="w-8 h-8 bg-gradient-to-r from-blue-600 to-cyan-500 rounded-lg" />
+              <Image src='beachhead_logo1.svg' alt='Beachhead Logo' width={32} height={32} />
               <span className="text-xl font-semibold text-gray-900 dark:text-white">
                 Beachhead
               </span>
