@@ -24,7 +24,7 @@ export default function RootLayout({
     <html lang="en">
       <body className={inter.className}>
         <PostHogProvider />
-        <main className="container mx-auto px-4 py-4 max-w-7xl">
+        <main>
           <Providers>{children}</Providers>
         </main>
         <Toaster />
