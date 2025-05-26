@@ -8,8 +8,8 @@ export default function Header() {
   const pathname = usePathname()
 
   return (
-    <header className="border-b">
-      <div className="container mx-auto px-4 max-w-7xl">
+    <nav className="border-b w-full">
+      <div className="px-4">
         <div className="flex items-center justify-between h-16">
           <div className="flex-shrink-0 font-bold text-xl">
             <Link href="/">Beachhead</Link>
@@ -23,6 +23,6 @@ export default function Header() {
           </div>
         </div>
       </div>
-    </header>
+    </nav>
   )
 }

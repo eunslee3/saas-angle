@@ -12,7 +12,7 @@ export default function AuthPage() {
   
   return (
     <>
-    <Navbar />
+    {/* <Navbar /> */}
     <AuthLayout title={isLogin ? 'Welcome back' : 'Create an account'} subtitle={isLogin ? 'Continue building your next successful product' : 'Start building your next successful product'}>
       {isLogin ? <LoginForm onSignUpClick={toggleForm} /> : <SignupForm onSignInClick={toggleForm} />}
     </AuthLayout>

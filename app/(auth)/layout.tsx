@@ -1,3 +1,4 @@
+import Header from '@/components/header'
 import { requireAuth } from '@/lib/authGuard'
 
 export default function AuthenticatedLayout({
@@ -9,6 +10,7 @@ export default function AuthenticatedLayout({
 
   return (
     <>
+      <Header />
       {children}
     </>
   )
