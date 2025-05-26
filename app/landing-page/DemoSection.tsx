@@ -1,5 +1,9 @@
 import React from 'react';
+import { useRouter } from 'next/navigation';
+
 export const DemoSection = () => {
+  const router = useRouter();
+
   return <div className="py-24">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         <div className="text-center max-w-3xl mx-auto mb-16">
@@ -22,7 +26,7 @@ export const DemoSection = () => {
           </div>
         </div>
         <div className="mt-12 text-center">
-          <button className="px-8 py-4 bg-gradient-to-r from-blue-600 to-cyan-500 text-white font-medium rounded-lg hover:from-blue-700 hover:to-cyan-600 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-2 dark:focus:ring-offset-gray-900 transition-all duration-200 hover:scale-[1.02] animate-gradient">
+          <button onClick={() => router.push('/auth')} className="px-8 py-4 bg-gradient-to-r from-blue-600 to-cyan-500 text-white font-medium rounded-lg hover:from-blue-700 hover:to-cyan-600 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-2 dark:focus:ring-offset-gray-900 transition-all duration-200 hover:scale-[1.02] animate-gradient">
             Try it free →
           </button>
         </div>
