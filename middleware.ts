@@ -9,7 +9,7 @@ export function middleware(request: NextRequest) {
 
   if (!token) {
     if (isApi) {
-      return new NextResponse(JSON.stringify({ error: 'Unauthorized' }), {
+      return new NextResponse(JSON.stringify({ error: 'Unauthorized', status: 401 }), {
         status: 401,
         headers: { 'Content-Type': 'application/json' },
       })

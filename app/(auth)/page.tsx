@@ -6,7 +6,7 @@ import { useQuery  } from '@tanstack/react-query'
 import axios from "axios"
 import LoadingModal from "@/components/loading-modal"
 import { MRRFilterModal } from "@/components/mrr-filter-modal"
-import posthog from "@/lib/postHogClient"
+import { useRouter } from "next/navigation"
 
 export default function Home() {
   const [isModalOpen, setIsModalOpen] = useState(false)
@@ -14,10 +14,14 @@ export default function Home() {
   const [currentPage, setCurrentPage] = useState(1)
   const [range, setRange] = useState<[number, number]>([0, 100000])
   const [searchTerm, setSearchTerm] = useState('')
-  
+  const router = useRouter()
+
   const fetchProducts = async ({ queryKey }: { queryKey: (string | number)[] }) => {
     const [_key, page, min, max] = queryKey
     const response = await axios.get(`/api/get-ideas?page=${page}&min=${min}&max=${max}`)
+    if (response.status === 401) {
+      router.push('/auth')
+    }
     return response.data.ideas
   }
 

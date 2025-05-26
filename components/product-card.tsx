@@ -8,6 +8,7 @@ import { useAngleStore } from "@/store/useAngleStore"
 export default function ProductCard({ product, setIsModalOpen }: { product: Products, setIsModalOpen: (isOpen: boolean) => void }) {
   const router = useRouter()
   const { setAngle } = useAngleStore()
+  
   const handleGenerateAngle = async () => {
     setIsModalOpen(true)
     const response = await axios.post('/api/generate-angle', { 
@@ -16,6 +17,11 @@ export default function ProductCard({ product, setIsModalOpen }: { product: Prod
       link: product.link,
       tagline: product.tagline
      })
+
+     if (response.status === 401) {
+      router.push('/auth')
+    }
+
     return response.data.angle
   }
 
