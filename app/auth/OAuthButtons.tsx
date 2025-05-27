@@ -2,24 +2,18 @@ import React from 'react';
 import { supabase } from '@/lib/supabaseClient';
 
 export const OAuthButtons = () => {
-  // const signInWithGoogle = async () => {
-  //   console.log('window: ', window.location.origin)
-  //   await supabase.auth.signInWithOAuth({
-  //     provider: 'google',
-  //     options: {
-  //       redirectTo: `${window.location.origin}/auth/callback`
-  //     }
-  //   })
-  // }
-
   const signInWithGoogle = async () => {
+    console.log('Log before supabase.auth.signInWithOAuth')
     await supabase.auth.signInWithOAuth({
       provider: 'google',
       options: {
         redirectTo: `${window.location.origin}/callback`,
-        scopes: 'openid email profile',
+        queryParams: {
+          prompt: 'select_account',  // <- this forces Google to show the account picker
+        },
       },
     })
+    console.log('Log after supabase.auth.signInWithOAuth')
   }
 
   return <div className="space-y-3">

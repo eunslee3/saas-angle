@@ -8,7 +8,7 @@ export default function Callback() {
   useEffect(() => {
     const handleCallback = async () => {
       // ✅ Exchange Supabase access token for your custom JWT
-      const { data, error } = await supabase.auth.exchangeCodeForSession(window.location.href)
+      const { data, error } = await supabase.auth.getSession()
       const session = data?.session
 
       if (error || !session) {

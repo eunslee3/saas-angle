@@ -6,10 +6,51 @@ import { serialize } from 'cookie'
 
 export async function POST(req: NextRequest) {
   const { access_token } = await req.json()
+  const { data, error } = await supabase.auth.getUser(access_token)
+  let provider: string | undefined
+  let identityId: string | undefined
+  let firstName: string | undefined
+  let lastName: string | undefined
 
-  const { data: user, error } = await supabase.auth.getUser(access_token)
-  if (error || !user) {
+  const user = data.user;
+  console.log('user: ', user)
+
+  if (!user) {
     return NextResponse.json({ error: 'Invalid token' }, { status: 401 })
+  }
+
+  if (user?.identities && user.identities.length > 0 && user.identities[0].provider) {
+    provider = user.identities[0].provider
+    identityId = user.identities[0].id
+    const fullName = user.user_metadata.full_name
+    const parts = fullName.trim().split(' ')
+    firstName = parts[0]
+    lastName = parts.length > 1 ? parts[parts.length - 1] : ''
+  }
+
+  const { data: userData, error: userError } = await supabase
+    .from('users')
+    .select('*')
+    .eq('id', user.id)
+    .maybeSingle()
+
+  console.log('userData: ', userData)
+
+  if (userError || error || !user) {
+    return NextResponse.json({ error: 'Invalid token' }, { status: 401 })
+  }
+
+  if (!userData || userData.length === 0) {
+    await supabase
+      .from('users')
+      .insert({
+        id: user.id,
+        email: user.email,
+        auth_provider: provider,
+        provider_id: identityId,
+        first_name: firstName,
+        last_name: lastName,
+      })
   }
 
   const customJwt = jwt.sign(
