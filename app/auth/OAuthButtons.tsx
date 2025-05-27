@@ -16,6 +16,15 @@ export const OAuthButtons = () => {
     console.log('Log after supabase.auth.signInWithOAuth')
   }
 
+  const signInWithGitHub = async () => {
+    await supabase.auth.signInWithOAuth({
+      provider: 'github',
+      options: {
+        redirectTo: `${window.location.origin}/callback`,
+      },
+    })
+  }
+
   return <div className="space-y-3">
       <button onClick={signInWithGoogle} className="w-full flex items-center justify-center space-x-3 px-4 py-2 border border-gray-300 rounded-lg hover:bg-gray-50 transition-colors" type="button">
         <svg className="w-5 h-5" viewBox="0 0 24 24">

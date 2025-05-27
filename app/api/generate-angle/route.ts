@@ -1,17 +1,17 @@
 import { NextResponse } from 'next/server'
 import OpenAI from 'openai'
 import { verifyAuthToken } from '@/lib/verifyAuthToken'
+import { NextRequest } from 'next/server'
 
 const openai = new OpenAI({
   apiKey: process.env.OPENAI_API_KEY,
 })
 
-export async function POST(request: Request) {
+export async function POST(request: NextRequest) {
   try {
-    const payload = await verifyAuthToken()
-    
+    await verifyAuthToken(request)
   } catch (error) {
-    return NextResponse.json({ error: 'Unauthorized' }, { status: 401 })
+    return NextResponse.json({ error: 'Unauthorized', status: 401 }, { status: 401 })
   }
 
   try {

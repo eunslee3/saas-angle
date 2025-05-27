@@ -13,7 +13,6 @@ export async function POST(req: NextRequest) {
   let lastName: string | undefined
 
   const user = data.user;
-  console.log('user: ', user)
 
   if (!user) {
     return NextResponse.json({ error: 'Invalid token' }, { status: 401 })
@@ -33,8 +32,6 @@ export async function POST(req: NextRequest) {
     .select('*')
     .eq('id', user.id)
     .maybeSingle()
-
-  console.log('userData: ', userData)
 
   if (userError || error || !user) {
     return NextResponse.json({ error: 'Invalid token' }, { status: 401 })

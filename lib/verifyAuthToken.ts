@@ -8,9 +8,7 @@ export async function verifyAuthToken(request: NextRequest) {
   const cookieHeader = request.headers.get('cookie')
 
   const cookies = parseCookies(cookieHeader)
-  console.log('cookies: ', cookies)
   const token = cookies['auth_token']
-  console.log('token: ', token)
 
   if (!token) {
     throw new Error('Missing auth token')

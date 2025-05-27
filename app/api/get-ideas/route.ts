@@ -1,7 +1,15 @@
 import { NextResponse } from "next/server"
 import { supabase } from "@/lib/supabaseClient"
+import { verifyAuthToken } from "@/lib/verifyAuthToken"
+import { NextRequest } from "next/server"
 
-export async function GET(request: Request) {
+export async function GET(request: NextRequest) {
+  try {
+    await verifyAuthToken(request)
+  } catch (error) {
+    return NextResponse.json({ error: 'Unauthorized', status: 401 }, { status: 401 })
+  }
+
   const { searchParams } = new URL(request.url)
 
   const page = parseInt(searchParams.get('page') || '1', 10)
