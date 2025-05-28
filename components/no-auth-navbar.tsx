@@ -10,7 +10,7 @@ export const Navbar = () => {
         <div className="flex items-center justify-between h-16">
           <div className="flex items-center space-x-2">
             <Image src='beachhead_logo1.svg' alt='Beachhead Logo' width={32} height={32} />
-            <span onClick={() => router.push('/landingpage')} className="cursor-pointer text-xl font-semibold text-gray-900 dark:text-white">
+            <span onClick={() => router.push('/')} className="cursor-pointer text-xl font-semibold text-gray-900 dark:text-white">
               Beachhead
             </span>
           </div>
