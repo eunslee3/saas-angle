@@ -8,6 +8,8 @@ export async function POST(request: NextRequest) {
   } catch (error) {
     return NextResponse.json({ error: 'Unauthorized', status: 401 }, { status: 401 })
   }
+  
+  try {
     const body = await request.json()
 
     // Check if the required angle data is present
