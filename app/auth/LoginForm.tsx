@@ -31,7 +31,7 @@ export const LoginForm = ({
       return res.data
     },
     onSuccess: () => {
-      router.push('/')
+      router.push('/feed')
     },
     onError: (err: AxiosError<any>) => {
       console.log(err)

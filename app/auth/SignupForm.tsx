@@ -34,7 +34,7 @@ export const SignupForm = ({
       return res.data
     },
     onSuccess: () => {
-      router.push('/')
+      router.push('/feed')
     },
     onError: (err: Error) => {
       setError(err.message)
