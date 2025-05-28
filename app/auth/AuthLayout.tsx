@@ -30,7 +30,7 @@ export const AuthLayout = ({
           <div>
             <div className="flex items-center space-x-2">
               <Image src='/beachhead_logo1.svg' alt='Beachhead Logo' width={32} height={32} />
-              <span onClick={() => router.push('/landing-page')} className="text-xl font-semibold text-gray-900 dark:text-white cursor-pointer">
+              <span onClick={() => router.push('/')} className="text-xl font-semibold text-gray-900 dark:text-white cursor-pointer">
                 Beachhead
               </span>
             </div>
