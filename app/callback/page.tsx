@@ -20,7 +20,7 @@ export default function Callback() {
         access_token: session.access_token,
       })
 
-      window.location.href = '/'
+      window.location.href = '/feed'
     }
 
     handleCallback()

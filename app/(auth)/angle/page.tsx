@@ -11,7 +11,7 @@ export default function AnglePage() {
 
   return (
     <div className="max-w-3xl mx-auto py-6">
-      <Link href="/" className="inline-flex items-center text-gray-600 hover:text-gray-900 mb-6">
+      <Link href="/feed" className="inline-flex items-center text-gray-600 hover:text-gray-900 mb-6">
         <ArrowLeft className="h-4 w-4 mr-2" />
         Back to ideas
       </Link>

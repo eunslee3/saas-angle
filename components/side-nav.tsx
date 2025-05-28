@@ -14,11 +14,13 @@ import {
 import Image from 'next/image'
 import { supabase } from '@/lib/supabaseClient'
 import axios from 'axios'
+import { useRouter } from 'next/navigation'
 
 interface SidebarProps {
   isOpen: boolean
   onToggle: () => void
 }
+
 const navItems = [
   {
     name: 'Get Started',
@@ -33,9 +35,10 @@ const navItems = [
   {
     name: 'Idea Feed',
     icon: Sparkles,
-    href: '/',
+    href: '/feed',
   },
 ]
+
 const bottomNavItems = [
   {
     name: 'Settings',
@@ -48,9 +51,11 @@ const bottomNavItems = [
     href: '/help',
   },
 ]
+
 export default function SideNav() {
   const [isOpen, setIsOpen] = useState(false)
   const onToggle = () => setIsOpen(!isOpen)
+  const router = useRouter()
 
   const logout = async () => {
     // Step 1: Sign out of Supabase
@@ -60,7 +65,7 @@ export default function SideNav() {
     await axios.post('/api/auth/logout')
   
     // Step 3: Redirect to login or landing page
-    window.location.href = '/auth'
+    router.push('/auth')
   }
 
   return (
@@ -101,14 +106,14 @@ export default function SideNav() {
         {/* Nav items */}
         <nav className="flex-1 p-4 space-y-1">
           {navItems.map((item) => (
-            <a
+            <button
               key={item.name}
-              href={item.href}
+              onClick={() => router.push(item.href)}
               className="flex items-center space-x-2 px-3 py-2 rounded-lg text-gray-600 dark:text-gray-300 hover:text-gray-900 dark:hover:text-white hover:bg-gray-100 dark:hover:bg-gray-800 transition-colors"
             >
               <item.icon className="w-5 h-5" />
               <span>{item.name}</span>
-            </a>
+            </button>
           ))}
         </nav>
         {/* Bottom nav */}
